@@ -1,4 +1,14 @@
-.idea/
-.ipynb_checkpoints/
+# Code editor's files
+.idea
+.ipynb_checkpoints
+.vscode
+
+# Python envoirment folder
+**env/
+
+# Model folder
+model/
+
+# Data folders
 data/
 output_data/
