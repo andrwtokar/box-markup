@@ -140,7 +140,7 @@ with PoseLandmarker.create_from_options(options) as landmarker:
     (
         ffmpeg
         .input(tmp_dir + "*.jpg", pattern_type='glob', framerate=fps)
-        .output(output_dir + 'result.mpeg4')
+        .output(output_dir + 'result.mp4')
         .run()
     )
 
