@@ -137,11 +137,15 @@ with PoseLandmarker.create_from_options(options) as landmarker:
 
     videoclip.release()
 
-    (
-        ffmpeg
-        .input(tmp_dir + "*.jpg", pattern_type='glob', framerate=fps)
-        .output(output_dir + 'result.mp4')
-        .run()
+    os.system(
+        (
+            "ffmpeg " +
+            "-r {} " +
+            "-i {}/%01d.jpg " +
+            "-qscale:v 2 " +
+            "-vcodec mpeg4 " +
+            "-y {}/result.mp4"
+        ).format(fps, tmp_dir, output_dir)
     )
 
 cv2.destroyAllWindows()
