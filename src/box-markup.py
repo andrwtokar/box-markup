@@ -141,10 +141,10 @@ with PoseLandmarker.create_from_options(options) as landmarker:
         (
             "ffmpeg " +
             "-r {} " +
-            "-i {}/%01d.jpg " +
+            "-i {}%01d.jpg " +
             "-qscale:v 2 " +
             "-vcodec mpeg4 " +
-            "-y {}/result.mp4"
+            "-y {}result.mp4"
         ).format(fps, tmp_dir, output_dir)
     )
 
