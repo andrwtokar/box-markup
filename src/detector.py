@@ -34,7 +34,7 @@ class PoseDetector:
             self,
             frame: np.ndarray,
             timestamp_ms: int
-    ) -> mp.tasks.vision.PoseLandmarkerResul:
+    ) -> mp.tasks.vision.PoseLandmarkerResult:
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
         return self.landmarker.detect_for_video(
             mp_image,

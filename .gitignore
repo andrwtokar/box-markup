@@ -1,7 +1,8 @@
 # Code editor's files
-.idea
-.ipynb_checkpoints
-.vscode
+idea
+ipynb_checkpoints
+vscode
+__pycache__
 
 # Python envoirment folder
 **env/
