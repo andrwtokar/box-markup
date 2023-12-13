@@ -147,11 +147,16 @@ with PoseLandmarker.create_from_options(options) as landmarker:
     #         "-y {}result.mp4"
     #     ).format(tmp_dir, fps, output_dir)
     # )
-    (
-        ffmpeg
-        .input(tmp_dir + "%01d.jpg", framerate=fps)
-        .output(output_dir + 'result.mp4', vcodec='mpeg4', **{'qscale:v': 2})
-        .run()
-    )
+    video = ffmpeg.input(tmp_dir + "%01d.jpg", framerate=fps)
+    audio = ffmpeg.input(INPUT_PATH + name).audio
+
+    ffmpeg.output(
+        video,
+        audio,
+        output_dir + 'result.mp4',
+
+        vcodec='mpeg4',
+        **{'qscale:v': 2}
+    ).run()
 
 cv2.destroyAllWindows()
