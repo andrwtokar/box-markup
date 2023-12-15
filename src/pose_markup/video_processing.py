@@ -2,7 +2,10 @@ import os
 import cv2
 import ffmpeg
 import numpy as np
-from detector import PoseDetector, draw_landmarks
+
+from pose_markup.detector import PoseDetector
+from pose_markup.drawing_utils import draw_landmarks
+from pose_markup.converting_utils import convert_landmarks_to_keypoints
 
 
 class OutputFolders:
@@ -54,7 +57,7 @@ class VideoProcessor:
                 frame,
                 int(ms_per_frame * frame_number)
             )
-            keypoints = PoseDetector.convert_landmarks_to_keypoints(
+            keypoints = convert_landmarks_to_keypoints(
                 landmarker_result
             )
 
