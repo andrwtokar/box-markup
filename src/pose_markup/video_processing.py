@@ -4,7 +4,7 @@ import ffmpeg
 import numpy as np
 
 from pose_markup.detector import PoseDetector
-from pose_markup.drawing_utils import draw_landmarks
+from pose_markup.drawing_utils import draw_landmarks, draw_pose
 from pose_markup.converting_utils import convert_landmarks_to_keypoints
 
 
@@ -39,7 +39,7 @@ class VideoProcessor:
         self.output_dir = output_dir
 
     def predict_keypoints(self, input_name: str) -> OutputFolders:
-        outputFolders = OutputFolders(
+        output_folders = OutputFolders(
             os.path.split(input_name)[1].split('.')[0],
             self.output_dir
         )
@@ -62,15 +62,16 @@ class VideoProcessor:
             )
 
             cv2.imwrite(
-                outputFolders.frames_dir + f"frame_{frame_number}.jpg",
+                output_folders.frames_dir + f"frame_{frame_number}.jpg",
                 frame
             )
-            cv2.imwrite(
-                outputFolders.tmp_dir + f"frame_{frame_number}.jpg",
-                draw_landmarks(frame, landmarker_result)
-            )
+            # Uncomment it if you wanna draw landmarks by mediapipe.solutions utily
+            # cv2.imwrite(
+            #     output_folders.tmp_dir + f"frame_{frame_number}.jpg",
+            #     draw_landmarks(frame, landmarker_result)
+            # )
             np.save(
-                outputFolders.keypoints_dir + f"frame_{frame_number}.npy",
+                output_folders.keypoints_dir + f"frame_{frame_number}.npy",
                 keypoints
             )
 
@@ -78,10 +79,20 @@ class VideoProcessor:
 
         videoclip.release()
 
-        return outputFolders
+        return output_folders
 
-    def add_keypoints_to_video(self):
-        pass
+    def add_keypoints_to_frames(self, output_folders: OutputFolders):
+        frame_names = os.listdir(output_folders.frames_dir)
+        keypoints_names = os.listdir(output_folders.keypoints_dir)
+
+        for frame_name, keypoints_name in zip(frame_names, keypoints_names):
+            frame = cv2.imread(frame_name)
+            keypoints = np.load(keypoints_name)
+            result_frame = draw_pose(frame, keypoints)
+
+            cv2.imwrite(output_folders.tmp_dir + frame_name, result_frame)
+
+        return output_folders
 
     def create_result_video(
             self,
