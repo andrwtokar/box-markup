@@ -75,19 +75,19 @@ def draw_connections(
 
     overlay = frame.copy()
     for i, j in __body_connections:
-        overlay = __draw_connection(
+        __draw_connection(
             overlay, keypoints[i], keypoints[j], thickness=thickness
         )
     for i, j in __head_connections:
-        overlay = __draw_connection(
+        __draw_connection(
             overlay, keypoints[i], keypoints[j], thickness=thickness
         )
     for i, j in __legs_connections:
-        overlay = __draw_connection(
+        __draw_connection(
             overlay, keypoints[i], keypoints[j], thickness=thickness
         )
     for i, j in __hands_connections:
-        overlay = __draw_connection(
+        __draw_connection(
             overlay, keypoints[i], keypoints[j], thickness=thickness
         )
 
@@ -101,11 +101,10 @@ def __draw_connection(
     color: tuple = (255, 255, 255),
     thickness: int = 1
 ) -> np.ndarray:
-    x1, y1, v1 = keypoint1
-    x2, y2, v2 = keypoint2
-    if v1 > 0.4 and v2 > 0.4:  # TODO: Change visaility settings
-        cv2.line(frame, (int(x1), int(y1)), (int(x2), int(y2)),
-                 color, thickness, cv2.LINE_AA)
+    x1, y1, _ = keypoint1
+    x2, y2, _ = keypoint2
+    cv2.line(frame, (int(x1), int(y1)), (int(x2), int(y2)),
+             color, thickness, cv2.LINE_AA)
     return frame
 
 
@@ -115,11 +114,13 @@ def __draw_keypoint(
         radius: int,
         color: tuple
 ) -> np.ndarray:
-    x, y, v = keypoint
+    x, y, _ = keypoint
     white = (255, 255, 255)
-    if v > 0.4:  # TODO: Change visaility settings
-        cv2.circle(frame, (int(x), int(y)), radius, color, -1, cv2.LINE_AA)
-        cv2.circle(frame, (int(x), int(y)), radius, white, 1, cv2.LINE_AA)
+
+    cv2.circle(frame, (int(x), int(y)), radius, color, -1, cv2.LINE_AA)
+    cv2.circle(frame, (int(x), int(y)), radius, white, 1, cv2.LINE_AA)
+
+    return frame
 
 
 def draw_landmarks(rgb_image, detection_result):

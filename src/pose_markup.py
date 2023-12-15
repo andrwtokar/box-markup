@@ -1,6 +1,6 @@
 import os
-from detector import PoseDetector
-from video_processing import VideoProcessor
+from pose_markup.detector import PoseDetector
+from pose_markup.video_processing import VideoProcessor
 
 INPUT_PATH = os.path.join(os.path.curdir, "data/")
 OUTPUT_PATH = os.path.join(os.path.curdir, "output_data/")
@@ -14,4 +14,5 @@ video_proc = VideoProcessor(detector, OUTPUT_PATH)
 
 names = os.listdir(INPUT_PATH)
 
-video_proc.process_video(INPUT_PATH + names[0])
+for name in names:
+    video_proc.process_video(INPUT_PATH + name)
