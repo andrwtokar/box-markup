@@ -1,6 +1,6 @@
 import os
 from pose_markup.detector import PoseDetector
-from pose_markup.video_processing import VideoProcessor
+from pose_markup.video_processor import VideoProcessor
 
 INPUT_PATH = os.path.join(os.path.curdir, "data/")
 OUTPUT_PATH = os.path.join(os.path.curdir, "output_data/")
