@@ -30,18 +30,10 @@ class PoseDetector:
     def __exit__(self, unused_exc_type, unused_exc_value, unused_traceback):
         self.close()
 
-    def predict_landmarks(
-            self,
-            frame: np.ndarray,
-            timestamp_ms: int
-    ) -> mp.tasks.vision.PoseLandmarkerResult:
+    def predict_landmarks(self, frame: np.ndarray, timestamp_ms: int) -> mp.tasks.vision.PoseLandmarkerResult:
         mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
         return self.landmarker.detect_for_video(mp_image, timestamp_ms)
 
-    def predict_keypoints(
-            self,
-            frame: np.ndarray,
-            timestamp_ms: int
-    ) -> np.ndarray:
+    def predict_keypoints(self, frame: np.ndarray, timestamp_ms: int) -> np.ndarray:
         landmark_result = self.predict_landmarks(frame, timestamp_ms)
         return convert_landmarks_to_keypoints(landmark_result)

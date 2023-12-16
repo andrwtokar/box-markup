@@ -2,9 +2,7 @@ import numpy as np
 import mediapipe as mp
 
 
-def convert_landmarks_to_keypoints(
-    pose_result: mp.tasks.vision.PoseLandmarkerResult
-) -> np.ndarray:
+def convert_landmarks_to_keypoints(pose_result: mp.tasks.vision.PoseLandmarkerResult) -> np.ndarray:
     __mask_17_points = {
         0: 0,  # nose
         1: 2,  # left eye
