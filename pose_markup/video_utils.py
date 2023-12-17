@@ -4,15 +4,16 @@ import ffmpeg
 import numpy as np
 
 from pose_markup.drawing_utils import draw_pose
+from pose_markup.converting_utils import unnormilized_keypoints
 
 
 class OutputFolders:
     def __init__(self, name: str, output_dir: str) -> None:
         self.output_dir = output_dir + name + "/"
 
-        self.keypoints_dir = self.output_dir + "keypoints/"
-        self.frames_dir = self.output_dir + "frames/"
-        self.tmp_dir = self.output_dir + "tmp/"
+        self.keypoints_dir = os.path.join(self.output_dir, "keypoints/")
+        self.frames_dir = os.path.join(self.output_dir, "frames/")
+        self.tmp_dir = os.path.join(self.output_dir, "tmp/")
 
         if not os.path.exists(self.output_dir):
             os.mkdir(self.output_dir)
@@ -28,12 +29,16 @@ class OutputFolders:
 
 
 def add_keypoints_to_frames(output_folders: OutputFolders):
-    frame_names = os.listdir(output_folders.frames_dir)
-    keypoints_names = os.listdir(output_folders.keypoints_dir)
+    frame_names = sorted(os.listdir(output_folders.frames_dir))
+    keypoints_names = sorted(os.listdir(output_folders.keypoints_dir))
 
     for frame_name, keypoints_name in zip(frame_names, keypoints_names):
-        frame = cv2.imread(frame_name)
-        keypoints = np.load(keypoints_name)
+        frame = cv2.imread(output_folders.frames_dir + frame_name)
+        keypoints = np.load(output_folders.keypoints_dir + keypoints_name)
+
+        width, height, _ = frame.shape
+        keypoints = unnormilized_keypoints(keypoints, width, height)
+
         result_frame = draw_pose(frame, keypoints)
 
         cv2.imwrite(output_folders.tmp_dir + frame_name, result_frame)
@@ -47,7 +52,8 @@ def create_result_video(input_name: str, output_folders: OutputFolders) -> ffmpe
     videoclip.release()
 
     video = ffmpeg.input(
-        output_folders.tmp_dir + "frame_%01d.jpg",
+        output_folders.tmp_dir + "frame_*.jpg",
+        pattern_type="glob",
         framerate=fps
     )
     audio = ffmpeg.input(input_name).audio
