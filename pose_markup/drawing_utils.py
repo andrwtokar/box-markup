@@ -19,8 +19,7 @@ __legs_connections = [(11, 13), (13, 15), (12, 14), (14, 16)]
 __hands_connections = [(5, 7), (7, 9), (6, 8), (8, 10)]
 
 
-def draw_landmarks(rgb_image: np.ndarray, detection_result: mp.tasks.vision.PoseLandmarker
-                   ) -> np.ndarray:
+def draw_landmarks(rgb_image: np.ndarray, detection_result: mp.tasks.vision.PoseLandmarker) -> np.ndarray:
     pose_landmarks_list = detection_result.pose_landmarks
     annotated_image = np.copy(rgb_image)
 
@@ -49,8 +48,7 @@ def draw_pose(frame: np.ndarray, keypoints: np.ndarray) -> np.ndarray:
     return frame
 
 
-def draw_keypoints(frame: np.ndarray, keypoints: np.ndarray,
-                   radius: int = 1, alpha: float = 1.0) -> np.ndarray:
+def draw_keypoints(frame: np.ndarray, keypoints: np.ndarray, radius: int = 1, alpha: float = 1.0) -> np.ndarray:
     overlay = frame.copy()
     for index, keypoint in enumerate(keypoints):
         if index == 0:
@@ -63,21 +61,20 @@ def draw_keypoints(frame: np.ndarray, keypoints: np.ndarray,
     return cv2.addWeighted(overlay, alpha, frame, 1.0 - alpha, 0)
 
 
-def draw_connections(frame: np.ndarray, keypoints: np.ndarray,
-                     thickness: int = 1, alpha: float = 1.0) -> np.ndarray:
+def draw_connections(frame: np.ndarray, keypoints: np.ndarray, thickness: int = 1, alpha: float = 1.0) -> np.ndarray:
     overlay = frame.copy()
     for i, j in __body_connections:
         __draw_connection(
-            overlay, keypoints[i], keypoints[j], thickness=thickness)
+            overlay, keypoints[i], keypoints[j], __white_color, thickness)
     for i, j in __head_connections:
         __draw_connection(
-            overlay, keypoints[i], keypoints[j], thickness=thickness)
+            overlay, keypoints[i], keypoints[j],  __white_color, thickness)
     for i, j in __legs_connections:
         __draw_connection(
-            overlay, keypoints[i], keypoints[j], thickness=thickness)
+            overlay, keypoints[i], keypoints[j],  __white_color, thickness)
     for i, j in __hands_connections:
         __draw_connection(
-            overlay, keypoints[i], keypoints[j], thickness=thickness)
+            overlay, keypoints[i], keypoints[j],  __white_color, thickness)
 
     return cv2.addWeighted(overlay, alpha, frame, 1.0 - alpha, 0)
 
@@ -100,7 +97,6 @@ def __draw_keypoint(frame: np.ndarray, keypoint: np.ndarray,
     return frame
 
 
-def draw_keypoints(rgb_image: np.ndarray, detection_result: mp.tasks.vision.PoseLandmarker
-                   ) -> np.ndarray:
+def draw_landmarks_as_keypoints(rgb_image: np.ndarray, detection_result: mp.tasks.vision.PoseLandmarker) -> np.ndarray:
     keypoints = convert_landmarks_to_keypoints(detection_result)
     return draw_keypoints(rgb_image, keypoints)
