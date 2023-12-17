@@ -1,6 +1,7 @@
 import os
 import cv2
 import numpy as np
+import mediapipe as mp
 
 from pose_markup.detector import PoseDetector
 from pose_markup.video_utils import OutputFolders, add_keypoints_to_frames, create_result_video
@@ -8,11 +9,12 @@ from pose_markup.converting_utils import convert_landmarks_to_keypoints
 
 
 class VideoProcessor:
-    def __init__(self, detector: PoseDetector, output_dir: str) -> None:
-        self.detector = detector
+    def __init__(self, detector_model_path: str, output_dir: str) -> None:
+        self.detector_model_path = detector_model_path
         self.output_dir = output_dir
 
     def predict_keypoints(self, input_name: str) -> OutputFolders:
+        detector = PoseDetector(self.detector_model_path)
         output_folders = OutputFolders(os.path.split(
             input_name)[1].split('.')[0], self.output_dir)
         videoclip = cv2.VideoCapture(input_name)
@@ -29,7 +31,7 @@ class VideoProcessor:
             if not flag:
                 break
 
-            landmarker_result = self.detector.predict_landmarks(
+            landmarker_result = detector.predict_landmarks(
                 frame, int(ms_per_frame * frame_number))
             keypoints = convert_landmarks_to_keypoints(landmarker_result)
 
@@ -59,6 +61,3 @@ class VideoProcessor:
         output_video = create_result_video(input_name, output_folders)
 
         output_video.run()
-
-    def __create_landmarker_options(model_path: str):
-        pass
