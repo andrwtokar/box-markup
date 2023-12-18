@@ -1,27 +1,34 @@
-# box-markup
+# pose-markup
 
 ---
 
-Project for markup video with training boxing punches. Here you can lay out key points according to the COCO topography using the OpenPose model.
+Project for marking poses on video.
 
-## Run 
+To recognize points, a Pose Landmarker from MediaPipe is used.
+The output data has 17 key points located in accordance with the COCO topology.
 
-### Install requirements
+## Prepequirements 
 
 - Firstly you need to install ffmpeg to your device. You can do it by [link](https://ffmpeg.org/download.html).
 - Secondly install requirements by next command:
-    ```
-    pip install -r requirements.txt
-    ```
+  ```
+   pip install -r requirements.txt
+  ```
+
+## Run markup data
+
+### Download model
+
+Download [landmarker](https://developers.google.com/mediapipe/solutions/vision/pose_landmarker#models) to directory `model/`.
 
 ### Add raw data
 
 Add the videos to be processed to the directory `date/`. Further, this folder will use in processing.
 
-### Run processing
+### Process data
 
 ```
-python3 src/box-markup.py
+python3 examples/keypoints_markup.py
 ```
 
 ### Take processed data
