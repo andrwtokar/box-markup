@@ -1,7 +1,10 @@
-import sys
-sys.path.append('./')
-
 import os
+import sys
+if "examples" in os.getcwd():
+    sys.path.append('../')
+else:
+    sys.path.append('./')
+
 from pose_markup.video_processor import VideoProcessor
 from pose_markup.detector import PoseDetector
 
