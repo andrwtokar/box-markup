@@ -4,7 +4,6 @@ import ffmpeg
 import numpy as np
 
 from pose_markup.drawing_utils import draw_pose
-from pose_markup.converting_utils import unnormilized_keypoints
 
 
 class OutputFolders:
@@ -35,9 +34,6 @@ def add_keypoints_to_frames(output_folders: OutputFolders):
     for frame_name, keypoints_name in zip(frame_names, keypoints_names):
         frame = cv2.imread(output_folders.frames_dir + frame_name)
         keypoints = np.load(output_folders.keypoints_dir + keypoints_name)
-
-        width, height, _ = frame.shape
-        keypoints = unnormilized_keypoints(keypoints, width, height)
 
         result_frame = draw_pose(frame, keypoints)
 

@@ -30,7 +30,3 @@ def convert_landmarks_to_keypoints(pose_result: mp.tasks.vision.PoseLandmarkerRe
     mask_landmarks = [landmarks[i]for i in __mask_landmarks_to_coco.values()]
     return np.array([[landmark.x, landmark.y, landmark.visibility]
                      for landmark in mask_landmarks])
-
-
-def unnormilized_keypoints(keypoints: np.ndarray, width: int, height: int) -> np.ndarray:
-    return (keypoints * [height, width, 1])

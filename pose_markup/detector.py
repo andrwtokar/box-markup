@@ -1,4 +1,3 @@
-import cv2
 import mediapipe as mp
 import numpy as np
 
@@ -14,12 +13,9 @@ class PoseDetector:
 
         base_options = BaseOptions(model_asset_path=model_path)
         options = PoseLandmarkerOptions(
-            base_options=base_options,
-            running_mode=VisionRunningMode.VIDEO
-        )
+            base_options=base_options, running_mode=VisionRunningMode.VIDEO)
 
-        self.landmarker = PoseLandmarker.create_from_options(
-            options)
+        self.landmarker = PoseLandmarker.create_from_options(options)
 
     def close(self):
         self.landmarker.close()
@@ -35,5 +31,7 @@ class PoseDetector:
         return self.landmarker.detect_for_video(mp_image, timestamp_ms)
 
     def predict_keypoints(self, frame: np.ndarray, timestamp_ms: int) -> np.ndarray:
+        width, height = frame.shape[:2]
         landmark_result = self.predict_landmarks(frame, timestamp_ms)
-        return convert_landmarks_to_keypoints(landmark_result)
+        keypoints = convert_landmarks_to_keypoints(landmark_result)
+        return keypoints * [height, width, 1]
