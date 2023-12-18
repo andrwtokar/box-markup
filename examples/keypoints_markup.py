@@ -1,8 +1,9 @@
-from pose_markup.video_processor import VideoProcessor
-from pose_markup.detector import PoseDetector
-import os
 import sys
 sys.path.append('./')
+
+import os
+from pose_markup.video_processor import VideoProcessor
+from pose_markup.detector import PoseDetector
 
 
 INPUT_PATH = os.path.join(os.getcwd(), "data/")
