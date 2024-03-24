@@ -55,7 +55,6 @@ class VideoProcessor:
 
     def process_video(self, input_name: str):
         output_folders = self.predict_keypoints(input_name)
-        output_folders = add_keypoints_to_frames(output_folders)
         output_video = create_result_video(input_name, output_folders)
 
         output_video.run()

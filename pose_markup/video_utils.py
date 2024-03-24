@@ -3,7 +3,7 @@ import os
 import ffmpeg
 import numpy as np
 
-from pose_markup.drawing_utils import draw_pose
+from pose_markup.drawing_utils import draw_pose_on_frame
 
 
 class OutputFolders:
@@ -33,16 +33,19 @@ def add_keypoints_to_frames(output_folders: OutputFolders):
 
     for frame_name, keypoints_name in zip(frame_names, keypoints_names):
         frame = cv2.imread(output_folders.frames_dir + frame_name)
+        # width, height = frame.shape[:2]
         keypoints = np.load(output_folders.keypoints_dir + keypoints_name)
 
-        result_frame = draw_pose(frame, keypoints)
+        keypoints_frame = draw_pose_on_frame(frame, keypoints)
+        # result_frame = cv2.addWeighted(frame, 0.5, keypoints_frame, 0.5, 0)
 
-        cv2.imwrite(output_folders.tmp_dir + frame_name, result_frame)
+        cv2.imwrite(output_folders.tmp_dir + frame_name, keypoints_frame)
 
     return output_folders
 
 
 def create_result_video(input_name: str, output_folders: OutputFolders) -> ffmpeg.Stream:
+    add_keypoints_to_frames(output_folders)
     videoclip = cv2.VideoCapture(input_name)
     fps = videoclip.get(cv2.CAP_PROP_FPS)
     videoclip.release()
@@ -52,7 +55,7 @@ def create_result_video(input_name: str, output_folders: OutputFolders) -> ffmpe
         pattern_type="glob",
         framerate=fps
     )
-    audio = ffmpeg.input(input_name).audio
+    audio = ffmpeg.input(input_name).audioы
 
     return ffmpeg.output(
         video, audio, output_folders.output_dir + 'result.mp4',

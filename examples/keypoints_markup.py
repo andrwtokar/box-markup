@@ -18,7 +18,8 @@ if not os.path.exists(OUTPUT_PATH):
 
 video_proc = VideoProcessor(MODEL_PATH, OUTPUT_PATH)
 
-names = os.listdir(INPUT_PATH)
+names = [filename for filename in os.listdir(INPUT_PATH) if '.mp4' in filename]
+# print(names[2:4])
 
-for name in names:
+for name in names[2:3]:
     video_proc.process_video(INPUT_PATH + name)
