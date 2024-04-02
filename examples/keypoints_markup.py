@@ -21,5 +21,5 @@ video_proc = VideoProcessor(MODEL_PATH, OUTPUT_PATH)
 names = [filename for filename in os.listdir(INPUT_PATH) if '.mp4' in filename]
 # print(names[2:4])
 
-for name in names[2:3]:
+for name in names:
     video_proc.process_video(INPUT_PATH + name)

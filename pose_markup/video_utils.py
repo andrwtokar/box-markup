@@ -73,7 +73,7 @@ def create_result_video(input_name: str, output_folders: OutputFolders) -> ffmpe
         pattern_type="glob",
         framerate=fps
     )
-    audio = ffmpeg.input(input_name).audioы
+    audio = ffmpeg.input(input_name).audio
 
     output_name = output_folders.output_dir + 'result.mp4'
 
