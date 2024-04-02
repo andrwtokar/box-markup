@@ -26,6 +26,24 @@ class OutputFolders:
         if not os.path.exists(self.tmp_dir):
             os.mkdir(self.tmp_dir)
 
+    @staticmethod
+    def __remove_directory(path: str):
+        for root, dirs, files in os.walk(path):
+            # For each file in the directory
+            for file in files:
+                # Construct the full path to the file
+                file_path = os.path.join(root, file)
+                # Delete the file
+                os.remove(file_path)
+            # For each subdirectory in the directory
+            for dir in dirs:
+                # Construct the full path to the subdirectory
+                dir_path = os.path.join(root, dir)
+                # Delete the subdirectory
+                OutputFolders.__remove_directory(dir_path)
+        # Delete the top-level directory
+        os.rmdir(path)
+
 
 def add_keypoints_to_frames(output_folders: OutputFolders):
     frame_names = sorted(os.listdir(output_folders.frames_dir))
@@ -57,6 +75,10 @@ def create_result_video(input_name: str, output_folders: OutputFolders) -> ffmpe
     )
     audio = ffmpeg.input(input_name).audioы
 
-    return ffmpeg.output(
-        video, audio, output_folders.output_dir + 'result.mp4',
-        vcodec='mpeg4', **{'qscale:v': 2})
+    output_name = output_folders.output_dir + 'result.mp4'
+
+    if os.path.exists(output_name):
+        os.remove(output_name)
+
+    return ffmpeg.output(video, audio, output_name,
+                         vcodec='mpeg4', **{'qscale:v': 2})
