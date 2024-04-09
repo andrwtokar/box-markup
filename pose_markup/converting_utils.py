@@ -27,6 +27,6 @@ __mask_landmarks_to_coco = {
 
 def convert_landmarks_to_keypoints(pose_result: mp.tasks.vision.PoseLandmarkerResult) -> np.ndarray:
     landmarks = pose_result.pose_landmarks[0]
-    mask_landmarks = [landmarks[i]for i in __mask_landmarks_to_coco.values()]
+    mask_landmarks = [landmarks[i] for i in __mask_landmarks_to_coco.values()]
     return np.array([[landmark.x, landmark.y, landmark.visibility]
                      for landmark in mask_landmarks])
