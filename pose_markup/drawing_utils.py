@@ -42,6 +42,28 @@ def draw_landmarks(rgb_image: np.ndarray, detection_result: mp.tasks.vision.Pose
     return annotated_image
 
 
+def draw_pose_on_frame(frame: np.ndarray, keypoints: np.ndarray) -> np.ndarray:
+    image = np.zeros(frame.shape, dtype=np.uint8)
+    connections_frame = draw_connections(image, keypoints, thickness=2)
+    keypoints_frame = draw_keypoints(image, keypoints, radius=4)
+
+    connections_frame = make_transparent(connections_frame)
+    keypoints_frame = make_transparent(keypoints_frame)
+    frame = make_transparent(frame)
+
+    frame = cv2.add(frame, connections_frame)
+    frame = cv2.add(frame, keypoints_frame)
+    return frame
+
+
+def make_transparent(frame: np.ndarray) -> np.ndarray:
+    grey_pose = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    _, mask = cv2.threshold(grey_pose, 0, 255, cv2.THRESH_BINARY)
+    b, g, r = cv2.split(frame)
+    rgba = [b, g, r, mask]
+    return cv2.merge(rgba, 4)
+
+
 def draw_pose(frame: np.ndarray, keypoints: np.ndarray) -> np.ndarray:
     frame = draw_connections(frame, keypoints, thickness=2, alpha=0.7)
     frame = draw_keypoints(frame, keypoints, radius=4, alpha=0.8)

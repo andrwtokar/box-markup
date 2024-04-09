@@ -1,4 +1,5 @@
 import os
+import time
 import cv2
 import numpy as np
 
@@ -48,14 +49,22 @@ class VideoProcessor:
 
             frame_number += 1
 
+        # Uncomment this line to print logs
+        # print(f"Additional info about prediction time on video {input_name}:\n" +
+        #       f"  Total time = {round(detector.total_prediction_time_ms, 3)} ms\n" +
+        #       f"  Total frame number = {detector.total_num_of_frames}\n" +
+        #       f"  Average time = {detector.get_average_prediction_time()} ms")
         detector.close()
         videoclip.release()
 
         return output_folders
 
     def process_video(self, input_name: str):
+        start = time.time()
         output_folders = self.predict_keypoints(input_name)
-        output_folders = add_keypoints_to_frames(output_folders)
         output_video = create_result_video(input_name, output_folders)
 
         output_video.run()
+        end = time.time()
+
+        return (end - start) * 1000
