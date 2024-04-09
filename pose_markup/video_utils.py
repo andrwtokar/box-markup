@@ -3,7 +3,7 @@ import os
 import ffmpeg
 import numpy as np
 
-from pose_markup.drawing_utils import draw_pose_on_frame
+from pose_markup.drawing_utils import draw_pose
 
 
 class OutputFolders:
@@ -51,13 +51,10 @@ def add_keypoints_to_frames(output_folders: OutputFolders):
 
     for frame_name, keypoints_name in zip(frame_names, keypoints_names):
         frame = cv2.imread(output_folders.frames_dir + frame_name)
-        # width, height = frame.shape[:2]
         keypoints = np.load(output_folders.keypoints_dir + keypoints_name)
+        result_frame = draw_pose(frame, keypoints)
 
-        keypoints_frame = draw_pose_on_frame(frame, keypoints)
-        # result_frame = cv2.addWeighted(frame, 0.5, keypoints_frame, 0.5, 0)
-
-        cv2.imwrite(output_folders.tmp_dir + frame_name, keypoints_frame)
+        cv2.imwrite(output_folders.tmp_dir + frame_name, result_frame)
 
     return output_folders
 

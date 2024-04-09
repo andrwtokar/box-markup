@@ -21,7 +21,7 @@ __hands_connections = [(5, 7), (7, 9), (6, 8), (8, 10)]
 
 def draw_landmarks(rgb_image: np.ndarray, detection_result: mp.tasks.vision.PoseLandmarker) -> np.ndarray:
     pose_landmarks_list = detection_result.pose_landmarks
-    annotated_image = np.zeros(rgb_image.shape, dtype=np.uint8)
+    annotated_image = np.copy(rgb_image)
 
     # Loop through the detected poses to visualize.
     for idx in range(len(pose_landmarks_list)):
