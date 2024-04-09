@@ -39,6 +39,7 @@ class PoseDetector:
         landmark_result = self.predict_landmarks(frame, timestamp_ms)
         keypoints = convert_landmarks_to_keypoints(landmark_result)
         res = keypoints * [height, width, 1]
+        res[:, :2] = res[:, :2].astype(np.int32).astype(np.float64)
         end = time.time()
 
         self.total_prediction_time_ms += (end - start) * 1000
