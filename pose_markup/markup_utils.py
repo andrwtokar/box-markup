@@ -20,12 +20,12 @@ def search_near_keypoint(keypoints, x, y):
 
 
 class MarkupImage:
-    def __init__(self, image, keypoints) -> None:
+    def __init__(self, image: np.ndarray, keypoints: np.ndarray) -> None:
         self.image = image
         self.keypoints = keypoints
         self.last_keypoint = []
 
-    def run(self, window_name):
+    def run(self, window_name: str, frame_num_info: str) -> None:
         def on_click(event, x, y, flags, param):
             near_keypoint = search_near_keypoint(self.keypoints, x, y)
 

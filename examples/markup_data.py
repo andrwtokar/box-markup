@@ -10,16 +10,22 @@ import numpy as np
 
 from pose_markup.markup_utils import MarkupImage
 
-# TODO: Добавить вывод правил редактирования
-# TODO: Добавить ввод названия видео с клавиатуры
+print("""### MARKING KEYPOINT ON VIDEO.
+### Instructions for frame-by-frame marking of the data on video:
+###  - Directory with data have to contain folders with frames ('frames/') and and with keypoints ('keypoints/');
+###  - Click LBM on the window and move it on the screen. If you click on the keypoint
+###    you will move keypoint to point where you release the LBM;
+###  - Push Space or Enter to go to the next frame;
+###  - Push Esc to end program.""")
+output_dir = input("Enter path to directory with data: ")
 
-OUTPUT_DIR = "output_data/1_2/frames/"
-KEYPOINTS_DIR = "output_data/1_2/keypoints/"
+frames_dir = output_dir + "/frames/"
+keypoints_dir = output_dir + "/keypoints/"
 
 
 window_name = "test_frame"
-frame_names = sorted(os.listdir(OUTPUT_DIR))
-keypoints_names = sorted(os.listdir(KEYPOINTS_DIR))
+frame_names = sorted(os.listdir(frames_dir))
+keypoints_names = sorted(os.listdir(keypoints_dir))
 
 number_of_frames = len(frame_names)
 for ind, (frame_filename, keypoints_filename) in enumerate(zip(frame_names, keypoints_names)):
