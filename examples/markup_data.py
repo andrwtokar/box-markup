@@ -22,15 +22,18 @@ frame_names = sorted(os.listdir(OUTPUT_DIR))
 keypoints_names = sorted(os.listdir(KEYPOINTS_DIR))
 
 number_of_frames = len(frame_names)
-cv2.namedWindow(window_name)
-for frame_name, keypoints_name in zip(frame_names, keypoints_names):
-    frame = cv2.imread(OUTPUT_DIR + frame_name)
-    keypoints = np.load(KEYPOINTS_DIR + keypoints_name)
+for ind, (frame_filename, keypoints_filename) in enumerate(zip(frame_names, keypoints_names)):
+    frame_filepath = frames_dir + frame_filename
+    keypoints_filepath = keypoints_dir + keypoints_filename
+
+    frame = cv2.imread(frame_filepath)
+    keypoints = np.load(keypoints_filepath)
     markup_image = MarkupImage(frame, keypoints)
 
-    if markup_image.run(window_name):
+    if markup_image.run(window_name, f"{ind + 1}/{number_of_frames}"):
         break
 
-    # TODO: Записывать обновленные координаты в файл
+    # Comment out this line if you don't need to save updates keypoints
+    np.save(keypoints_filepath, markup_image.get_keypoints())
 
 cv2.destroyAllWindows()

@@ -39,8 +39,8 @@ class MarkupImage:
 
             cv2.imshow(window_name, draw_pose(self.image, self.keypoints))
 
-        # TODO: Выводить номер изображения в видео для ориентации
-        # TODO: Выбрать как показывать кадры: все в одном окне или в разных.
+        cv2.namedWindow(window_name)
+        cv2.setWindowTitle(window_name, f"{window_name} - {frame_num_info}")
         cv2.setMouseCallback(window_name, on_click)
         while True:
             cv2.imshow(window_name, draw_pose(self.image, self.keypoints))
@@ -52,3 +52,6 @@ class MarkupImage:
                 return True
 
         return False
+
+    def get_keypoints(self):
+        return self.keypoints
