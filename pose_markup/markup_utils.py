@@ -4,6 +4,16 @@ from pose_markup.drawing_utils import draw_pose
 
 
 def search_near_keypoint(keypoints, x, y):
+    """Method for finding the closest keypoint to input coordinates (x, y)
+
+    Args:
+        keypoints (np.ndarray): keypoints to seach
+        x (int): x-coordinate
+        y (int): y-coordinate
+
+    Returns:
+        int: index of the nearest keypoint. Return None if the (x, y) do not cover the keypoint
+    """
     min_dist = np.inf
     keypoint_ind = -1
 
@@ -25,7 +35,16 @@ class MarkupImage:
         self.keypoints = keypoints
         self.last_keypoint = []
 
-    def run(self, window_name: str, frame_num_info: str) -> None:
+    def run_and_quit(self, window_name: str, frame_num_info: str) -> bool:
+        """The method implements the logic for data markup.
+
+        Args:
+            window_name (str): working window name 
+            frame_num_info (str): information about the frame number in the video
+
+        Returns:
+            bool: processing completion flag 
+        """
         def on_click(event, x, y, flags, param):
             near_keypoint = search_near_keypoint(self.keypoints, x, y)
 

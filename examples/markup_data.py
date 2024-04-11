@@ -36,7 +36,9 @@ for ind, (frame_filename, keypoints_filename) in enumerate(zip(frame_names, keyp
     keypoints = np.load(keypoints_filepath)
     markup_image = MarkupImage(frame, keypoints)
 
-    if markup_image.run(window_name, f"{ind + 1}/{number_of_frames}"):
+    is_quit = markup_image.run_and_quit(window_name, f"{ind + 1}/{number_of_frames}")
+    
+    if is_quit:
         break
 
     # Comment out this line if you don't need to save updates keypoints
