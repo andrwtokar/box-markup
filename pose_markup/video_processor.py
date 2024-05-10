@@ -1,7 +1,7 @@
 import os
 import time
 import cv2
-import numpy as np
+import json
 
 from pose_markup.detector import PoseDetector
 from pose_markup.video_utils import *
@@ -30,7 +30,7 @@ class VideoProcessor:
             if not flag:
                 break
 
-            keypoints = detector.predict_keypoints(
+            keypoints_annotations = detector.predict_coco_keypoints(
                 frame, int(ms_per_frame * frame_number))
 
             frame_filename = output_folders.frames_dir + \
@@ -38,8 +38,9 @@ class VideoProcessor:
             cv2.imwrite(frame_filename, frame)
 
             keypoints_filename = output_folders.keypoints_dir + \
-                f"frame_{frame_number:0{frame_number_size}}.npy"
-            np.save(keypoints_filename, keypoints)
+                f"frame_{frame_number:0{frame_number_size}}.json"
+            with open(keypoints_filename, "w") as outfile:
+                json.dump(keypoints_annotations, outfile)
 
             # Uncomment next lines if you wanna draw landmarks by mediapipe.solutions utily
             # tmp_frame_filename = output_folders.tmp_dir + \
