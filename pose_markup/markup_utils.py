@@ -46,8 +46,10 @@ class MarkupImage:
             bool: processing completion flag 
         """
         def on_click(event, x, y, flags, param):
+            # TODO: Возможно поиск ближайшей точки стоит делать не всегда, а только когда есть какой-то event
             near_keypoint = search_near_keypoint(self.keypoints, x, y)
 
+            # TODO: Добавить возможность выставлять visubility в ноль.
             if event == cv2.EVENT_LBUTTONDOWN:
                 self.last_keypoint.append(near_keypoint)
             if event == cv2.EVENT_LBUTTONUP:

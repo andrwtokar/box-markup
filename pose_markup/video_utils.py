@@ -28,7 +28,7 @@ class OutputFolders:
             os.mkdir(self.tmp_dir)
 
     @staticmethod
-    def __remove_directory(path: str):
+    def remove_directory(path: str):
         for root, dirs, files in os.walk(path):
             # For each file in the directory
             for file in files:

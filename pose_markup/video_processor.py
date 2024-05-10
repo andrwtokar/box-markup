@@ -66,6 +66,7 @@ class VideoProcessor:
         output_video = create_result_video(input_name, output_folders)
 
         output_video.run()
+        OutputFolders.remove_directory(output_folders.tmp_dir)
         end = time.time()
 
         return (end - start) * 1000
