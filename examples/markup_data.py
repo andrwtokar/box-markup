@@ -5,6 +5,7 @@ if "examples" in os.getcwd():
 else:
     sys.path.append('./')
 
+import json
 import cv2
 import numpy as np
 
@@ -33,15 +34,20 @@ for ind, (frame_filename, keypoints_filename) in enumerate(zip(frame_names, keyp
     keypoints_filepath = keypoints_dir + keypoints_filename
 
     frame = cv2.imread(frame_filepath)
-    keypoints = np.load(keypoints_filepath)
+    with open(keypoints_filepath, "r") as file:
+        annotation = json.load(file)
+        keypoints = np.array(annotation['keypoints']).reshape((-1, 3))
     markup_image = MarkupImage(frame, keypoints)
 
-    is_quit = markup_image.run_and_quit(window_name, f"{ind + 1}/{number_of_frames}")
-    
+    is_quit = markup_image.run_and_quit(
+        window_name, f"{ind + 1}/{number_of_frames}")
+
     if is_quit:
         break
 
     # Comment out this line if you don't need to save updates keypoints
-    np.save(keypoints_filepath, markup_image.get_keypoints())
+    with open(keypoints_filepath, "w") as file:
+        annotation['keypoints'] = markup_image.get_keypoints().flatten().tolist()
+        json.dump(annotation, file)
 
 cv2.destroyAllWindows()
