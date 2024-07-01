@@ -1,6 +1,7 @@
 import cv2
 import os
 import ffmpeg
+import json
 import numpy as np
 
 from pose_markup.drawing_utils import draw_pose
@@ -27,7 +28,7 @@ class OutputFolders:
             os.mkdir(self.tmp_dir)
 
     @staticmethod
-    def __remove_directory(path: str):
+    def remove_directory(path: str):
         for root, dirs, files in os.walk(path):
             # For each file in the directory
             for file in files:
@@ -51,9 +52,11 @@ def add_keypoints_to_frames(output_folders: OutputFolders):
 
     for frame_name, keypoints_name in zip(frame_names, keypoints_names):
         frame = cv2.imread(output_folders.frames_dir + frame_name)
-        keypoints = np.load(output_folders.keypoints_dir + keypoints_name)
-        result_frame = draw_pose(frame, keypoints)
+        with open(output_folders.keypoints_dir + keypoints_name, "r") as infile:
+            annotation = json.load(infile)
+            keypoints = np.array(annotation['keypoints']).reshape((-1, 3))
 
+        result_frame = draw_pose(frame, keypoints)
         cv2.imwrite(output_folders.tmp_dir + frame_name, result_frame)
 
     return output_folders
